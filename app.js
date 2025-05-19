@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config({ path: "./src/.env" }); // Load environment variables here
 require("./src/db/mongodb");
 const app = express();
 const port = 3000;

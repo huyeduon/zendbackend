@@ -7,8 +7,10 @@ class MongoDB {
 
   connectDB = async () => {
     try {
+      const db_password = process.env.mongodb_password;
+      console.log(db_password); // Log to verify
       const conn = await mongoose.connect(
-        "mongodb+srv://huyen:huyenzend@cluster0.7m3t7.mongodb.net/"
+        `mongodb+srv://huyen:${db_password}@cluster0.7m3t7.mongodb.net/`
       );
       console.log("MongoDB Connected...");
     } catch (error) {
