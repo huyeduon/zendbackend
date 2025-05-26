@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
+
 const { Schema } = mongoose;
 
 const categorySchema = new Schema({
@@ -8,6 +9,4 @@ const categorySchema = new Schema({
   isShowHome: Boolean,
 });
 
-module.exports = {
-  model: mongoose.model("category", categorySchema),
-};
+module.exports = mongoose.model("category", categorySchema);
