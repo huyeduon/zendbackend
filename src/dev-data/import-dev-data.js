@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const Category = require("../models/category.model");
 
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "../../.env" });
 const connectDB = async () => {
   try {
     const db_password = process.env.mongodb_password;
