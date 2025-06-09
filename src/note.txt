@@ -1,3 +1,14 @@
 1, Update, neu field la empty -> giu nguyen gia tri cu
 2, Check ID trc khi delete...
 3, Validation
+
+////
+
+1, Add them thong tin status, keyword, ishow... trong findAll
+
+2, Tao mot router, moi lan an vao nut order se tang order
+
+3, Them cac custom error
+
+4, Posts Models
+

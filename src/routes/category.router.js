@@ -9,9 +9,11 @@ const {
   updateCategoryById,
 } = require("../controllers/category.controller");
 
-router.get("/", getAllCategory);
-router.post("/", postCategory);
-router.get("/:id", getCategoryById);
-router.delete("/:id", deleteCategoryById);
-router.put("/:id", updateCategoryById);
+const { asyncHandle } = require("../utils/asyncHandle");
+
+router.get("/", asyncHandle(getAllCategory));
+router.post("/", asyncHandle(postCategory));
+router.get("/:id", asyncHandle(getCategoryById));
+router.delete("/:id", asyncHandle(deleteCategoryById));
+router.put("/:id", asyncHandle(updateCategoryById));
 module.exports = router;

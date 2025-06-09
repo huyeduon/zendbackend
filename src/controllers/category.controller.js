@@ -5,10 +5,13 @@ const {
   findByIdAndDelete,
   findByIdAndUpdate,
 } = require("../services/category.service");
+const { CheckObjectId } = require("../utils/checkObjectId");
+const { BadRequestError } = require("../core/custom_error");
 
 const getAllCategory = async (req, res, next) => {
-  const data = await findAll();
-  res.send(data);
+  res.send({
+    metadata: await findAll(req.query),
+  });
 };
 
 const postCategory = async (req, res, next) => {
@@ -21,27 +24,29 @@ const postCategory = async (req, res, next) => {
 
 const getCategoryById = async (req, res, next) => {
   const { id } = req.params;
+  if (!CheckObjectId(id)) throw new BadRequestError();
   const result = await findById(id);
+  if (!result) throw new Error("Cannot find ");
+
   res.send(result);
 };
 
 const deleteCategoryById = async (req, res, next) => {
   const { id } = req.params;
-  await findByIdAndDelete(id);
+  const category = await findById(id);
+  if (!category) throw Error("Cannot find category to delete.");
   res.send({
-    message: "Delete successfully.",
+    metadata: await findByIdAndDelete(id),
   });
 };
 
 const updateCategoryById = async (req, res, next) => {
   const { id } = req.params;
-
   const category = await findById(id);
-  if (!category) return res.send("Cannot find the ID");
+  if (!category) throw Error("Cannot find category to delete.");
 
-  await findByIdAndUpdate(id, req.body);
   res.send({
-    message: "Update successfully",
+    metadata: findByIdAndUpdate(id, req.body),
   });
 };
 

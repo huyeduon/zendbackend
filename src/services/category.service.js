@@ -1,70 +1,38 @@
 const MyModel = require("../models/category.model");
 
 // Get all categories
-const findAll = async () => {
-  try {
-    const categories = await MyModel.find();
-    return { categories };
-  } catch (error) {
-    console.error("Error in findAll:", error);
-    throw new Error("Failed to fetch categories");
-  }
+const findAll = async ({ page = 1, limit = 5, keyword = "" }) => {
+  // limit= item per page
+  let skip = (page - 1) * limit;
+
+  const [data, total] = await Promise.all([
+    MyModel.find().skip(skip).limit(limit),
+    MyModel.countDocuments(),
+  ]);
+  return { page, total, limit, keyword, data };
 };
 
 // Create a new category
 const createCategory = async (data) => {
-  try {
-    await MyModel.create(data);
-    return { data };
-  } catch (error) {
-    console.error("Errot in createCategory:", error);
-    throw new Error("Failed to create category");
-  }
+  await MyModel.create(data);
+  return { message: "Create Successfully" };
 };
 
-// Find category by ID
+// Find a category by ID
 const findById = async (id) => {
-  try {
-    const category = await MyModel.findById(id);
-    if (!category) {
-      throw new Error("Category not found");
-    }
-    return { category };
-  } catch (error) {
-    console.error("Error in findById:", error);
-    throw new Error("Failed to find category");
-  }
+  return await MyModel.findById(id);
 };
 
-// Delete category by ID
+// Delete a category by ID
 const findByIdAndDelete = async (id) => {
-  try {
-    const category = await MyModel.findByIdAndDelete(id);
-    if (!category) {
-      throw new Error("Category not found or already deleted");
-    }
-    return { category };
-  } catch (error) {
-    console.error("Error in findByIdAndDelete:", error);
-    throw new Error("Failed to delete category");
-  }
+  await MyModel.findByIdAndDelete(id);
+  return { message: "Delete Successfully" };
 };
 
 // Update category by ID
 const findByIdAndUpdate = async (id, update) => {
-  try {
-    const category = await MyModel.findByIdAndUpdate(id, update, {
-      new: true,
-      runValidators: true,
-    });
-    if (!category) {
-      throw new Error("Category not found");
-    }
-    return { category };
-  } catch (error) {
-    console.error("Error in findByIdAndUpdate:", error);
-    throw new Error("Failed to update category");
-  }
+  await MyModel.findByIdAndUpdate(id, update);
+  return { message: "Update Successfully" };
 };
 
 module.exports = {
