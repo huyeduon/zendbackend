@@ -1,42 +1,42 @@
 [
   {
-    "catetory_name": "Thoi su",
+    "category_name": "Thoi su",
     "status": "active",
     "ordering": 1,
     "isShowHome": true
   },
   {
-    "catetory_name": "The gioi",
+    "category_name": "The gioi",
     "status": "active",
     "ordering": 2,
     "isShowHome": true
   },
   {
-    "catetory_name": "The thao",
+    "category_name": "The thao",
     "status": "active",
     "ordering": 3,
     "isShowHome": true
   },
   {
-    "catetory_name": "Cong nghe",
+    "category_name": "Cong nghe",
     "status": "active",
     "ordering": 4,
     "isShowHome": true
   },
   {
-    "catetory_name": "ACI",
+    "category_name": "ACI",
     "status": "active",
     "ordering": 5,
     "isShowHome": true
   },
   {
-    "catetory_name": "NXOS",
+    "category_name": "NXOS",
     "status": "active",
     "ordering": 6,
     "isShowHome": true
   },
   {
-    "catetory_name": "Nexus-ONE",
+    "category_name": "Nexus-ONE",
     "status": "active",
     "ordering": 7,
     "isShowHome": true
