@@ -7,10 +7,21 @@ DATABASE_NAME = "Category";
 
 const categorySchema = new Schema(
   {
-    category_name: String,
+    category_name: {
+      type: String,
+      required: [true, "Category must have a name."],
+    },
     category_slug: String,
-    status: String,
-    ordering: Number,
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "inactive",
+    },
+    ordering: {
+      type: Number,
+      required: [true, "Ordering must be a number."],
+    },
+
     isShowHome: Boolean,
   },
   {
@@ -33,4 +44,4 @@ categorySchema.pre("save", function (next) {
   next();
 });
 
-module.exports = mongoose.model("category", categorySchema);
+module.exports = mongoose.model(DATABASE_NAME, categorySchema);
