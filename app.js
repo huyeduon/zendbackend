@@ -1,4 +1,5 @@
 const express = require("express");
+const { default: mongoose } = require("mongoose");
 require("dotenv").config({ path: ".env" }); // Load environment variables here
 require("./src/db/mongodb");
 const app = express();
@@ -10,6 +11,23 @@ app.use("/api/v1", require("./src/routes"));
 app.use((req, res, next) => {
   const error = new Error("Not found");
   error.status = 404;
+  next(error);
+});
+
+// Check if error is mongose error
+app.use((error, req, res, next) => {
+  if (error instanceof mongoose.Error.ValidationError) {
+    const e = {};
+    for (const field in error.errors) {
+      // console.log(field);
+      // console.log(error.errors);
+      e[field] = error.errors[field].message;
+    }
+    return res.status(400).json({
+      status: 400,
+      message: e,
+    });
+  }
   next(error);
 });
 
