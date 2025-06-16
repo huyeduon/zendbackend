@@ -36,17 +36,27 @@ const findByIdAndDelete = async (id) => {
 };
 
 // Update category by ID
-const findByIdAndUpdate = async (id, update) => {
-  if (update.category_name) {
-    await MyModel.findByIdAndUpdate(id, {
-      ...update,
-      category_slug: slugify(update.category_name),
-    });
-  } else {
-    await MyModel.findByIdAndUpdate(id, update);
-  }
+const findByIdAndUpdate = async (
+  id,
+  { post_title, post_description, status, ordering, ...params }
+) => {
+  await MyModel.findByIdAndUpdate(id, {
+    post_title,
+    post_description,
+    status,
+    ordering,
+    params,
+  });
 
-  return { message: "Update Successfully" };
+  return { message: "Update post successfully" };
+};
+
+const findByIdAndUpdateImage = async (id, post_image) => {
+  await MyModel.findByIdAndUpdate(id, {
+    post_image,
+  });
+
+  return { message: "Image update successfully" };
 };
 
 module.exports = {
@@ -55,4 +65,5 @@ module.exports = {
   findById,
   findByIdAndDelete,
   findByIdAndUpdate,
+  findByIdAndUpdateImage,
 };

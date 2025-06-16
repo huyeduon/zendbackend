@@ -1,4 +1,5 @@
 const express = require("express");
+
 const { default: mongoose } = require("mongoose");
 require("dotenv").config({ path: ".env" }); // Load environment variables here
 require("./src/db/mongodb");
@@ -6,7 +7,7 @@ const app = express();
 const port = 3000;
 app.use(express.json());
 app.use("/api/v1", require("./src/routes"));
-
+app.use(express.static("public"));
 // Middle check not found
 app.use((req, res, next) => {
   const error = new Error("Not found");

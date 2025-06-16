@@ -4,6 +4,7 @@ const {
   findById,
   findByIdAndDelete,
   findByIdAndUpdate,
+  findByIdAndUpdateImage,
 } = require("../services/post.service");
 const { findById: findCategoryById } = require("../services/category.service");
 const { CheckObjectId } = require("../utils/checkObjectId");
@@ -32,10 +33,8 @@ const getPostById = async (req, res, next) => {
   const { id } = req.params;
   if (!CheckObjectId(id)) throw new BAD_REQUEST();
   let result = await findById(id);
+  console.log(result);
   if (!result) throw new Error("Cannot find ");
-  const category_id = result.category_id;
-  const data = await findCategoryById(category_id);
-  result["category_name"] = data.category_name;
 
   // res.send(result);
   new OK({
@@ -60,12 +59,23 @@ const deletePostById = async (req, res, next) => {
 
 const updatePostById = async (req, res, next) => {
   const { id } = req.params;
-  const category = await findById(id);
-  if (!category) throw Error("Cannot find category to update.");
+  const post = await findById(id);
+  if (!post) throw Error("Cannot find post to update.");
 
   new CREATED({
     message: "Update successfully",
     metadata: await findByIdAndUpdate(id, req.body),
+  }).send(res);
+};
+
+const addImage = async (req, res, next) => {
+  const { id } = req.params;
+  const post = await findById(id);
+  if (!post) throw Error("Cannot find post to add image.");
+  console.log(req.file);
+  new CREATED({
+    message: "Update successfully",
+    metadata: await findByIdAndUpdateImage(id, req.file.filename),
   }).send(res);
 };
 
@@ -75,4 +85,5 @@ module.exports = {
   getPostById,
   deletePostById,
   updatePostById,
+  addImage,
 };

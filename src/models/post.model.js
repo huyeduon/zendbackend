@@ -11,6 +11,9 @@ const postSchema = new Schema(
       type: String,
       required: [true, "Post must have a title"],
     },
+    post_image: {
+      type: String,
+    },
     post_description: {
       type: String,
     },
