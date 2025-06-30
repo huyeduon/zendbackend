@@ -6,9 +6,10 @@ const {
   findByIdAndUpdate,
   findByIdAndUpdateImage,
 } = require("../services/post.service");
+const cloudinary = require("../core/ cloudinary_config");
 const { findById: findCategoryById } = require("../services/category.service");
 const { CheckObjectId } = require("../utils/checkObjectId");
-
+const fs = require("fs");
 const { OK, CREATED, BAD_REQUEST } = require("../core/http_response");
 
 const getAllPost = async (req, res, next) => {
@@ -72,10 +73,25 @@ const addImage = async (req, res, next) => {
   const { id } = req.params;
   const post = await findById(id);
   if (!post) throw Error("Cannot find post to add image.");
-  console.log(req.file);
+
+  // Upload an image to cloudinary
+  const uploadResult = await cloudinary.uploader
+    .upload(req.file.path, {
+      public_id: req.file.filename,
+      folder: "zendvn/posts",
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      fs.unlinkSync(req.file.path);
+    });
+
+  console.log(uploadResult);
+
   new CREATED({
     message: "Update successfully",
-    metadata: await findByIdAndUpdateImage(id, req.file.filename),
+    metadata: await findByIdAndUpdateImage(id, uploadResult.url),
   }).send(res);
 };
 
