@@ -59,6 +59,14 @@ const findByIdAndUpdateImage = async (id, post_image) => {
   return { message: "Image update successfully" };
 };
 
+const findByIdAndUpdateImages = async (id, post_images) => {
+  await MyModel.findByIdAndUpdate(id, {
+    post_images,
+  });
+
+  return { message: "Image update successfully" };
+};
+
 module.exports = {
   findAll,
   createPost,
@@ -66,4 +74,5 @@ module.exports = {
   findByIdAndDelete,
   findByIdAndUpdate,
   findByIdAndUpdateImage,
+  findByIdAndUpdateImages,
 };

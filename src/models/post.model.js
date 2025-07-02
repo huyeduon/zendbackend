@@ -14,6 +14,9 @@ const postSchema = new Schema(
     post_image: {
       type: String,
     },
+    post_images: {
+      type: Array,
+    },
     post_description: {
       type: String,
     },
