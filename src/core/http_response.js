@@ -64,11 +64,11 @@ class CREATED extends SuccessResponse {
 
 // Error Responses
 class BAD_REQUEST extends ErrorResponse {
-  constructor({
+  constructor(
     message = status_message.BAD_REQUEST,
     statusCode = status_code.BAD_REQUEST,
-    metadata = {},
-  }) {
+    metadata = {}
+  ) {
     super({ message, statusCode, metadata });
   }
 }
