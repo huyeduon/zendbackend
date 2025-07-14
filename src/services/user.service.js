@@ -11,7 +11,17 @@ const registerUser = async (data) => {
   return { message: "Create Successfully" };
 };
 
+const findUserById = async (userid, select = "") => {
+  return await MyModel.findById(userid).select(select);
+};
+
+const findUserByIdAndUpdatePassword = async (userid, hashedPassword) => {
+  return await MyModel.findByIdAndUpdate(userid, { password: hashedPassword });
+};
+
 module.exports = {
   registerUser,
   findUserByEmail,
+  findUserById,
+  findUserByIdAndUpdatePassword,
 };

@@ -74,11 +74,11 @@ class BAD_REQUEST extends ErrorResponse {
 }
 
 class UNAUTHORIZED extends ErrorResponse {
-  constructor({
+  constructor(
     message = status_message.UNAUTHORIZED,
     statusCode = status_code.UNAUTHORIZED,
-    metadata = {},
-  }) {
+    metadata = {}
+  ) {
     super({ message, statusCode, metadata });
   }
 }
