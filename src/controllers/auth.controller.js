@@ -4,7 +4,7 @@ const {
   findUserById,
   findUserByIdAndUpdatePassword,
 } = require("../services/user.service");
-const { OK, CREATED, BAD_REQUEST } = require("../core/http_response");
+const { OK, BAD_REQUEST } = require("../core/http_response");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
@@ -18,7 +18,7 @@ const register = async (req, res, next) => {
   const user = await findUserByEmail(email);
   if (user) throw new BAD_REQUEST("Email exists, please use different email.");
 
-  let salt = await bcrypt.genSaltSync(saltRounds);
+  let salt = bcrypt.genSaltSync(saltRounds);
 
   let hashedPassword = bcrypt.hashSync(password, salt);
 

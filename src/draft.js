@@ -1,17 +1,22 @@
-const multer = require("multer");
+const { BAD_REQUEST } = require("./core/http_response");
+const saltRouds = 10;
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const fileExtension = file.originalname.split(".").pop();
+const register = async (req, res, next) => {
+  const { email, password } = req.body;
 
-    cb(null, file.filename + "-" + uniqueSuffix + "." + fileExtension);
-  },
-});
+  // check if the email is already exist
+  const user = await findUserByEmail(email);
+  if (user) throw new BAD_REQUEST("Email exists, please use different email.");
 
-const upload = multer({ storage: storage });
+  let salt = bcrypt.genSaltSync(saltRouds);
+  let hashedPassword = bcrypt.hashSync(password, salt);
+};
 
-module.exports = upload;
+const findUserByEmail = async (email) => {
+  return await MyModel.findOne({ email });
+};
+
+const registerUser = async (data) => {
+  await MyModel.creat(data);
+  return { message: "Created successfully" };
+};
