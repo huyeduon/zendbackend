@@ -8,7 +8,7 @@ const findUserByEmail = async (email) => {
 // Create a new category
 const registerUser = async (data) => {
   await MyModel.create(data);
-  return { message: "Create Successfully" };
+  return { message: "Create user successfully" };
 };
 
 const findUserById = async (userid, select = "") => {

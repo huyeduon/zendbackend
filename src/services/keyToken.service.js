@@ -11,12 +11,11 @@ const createToken = async ({ refresh_token, userid }) => {
 };
 
 // Return a object if found
-const findOne = async ({ refresh_token, userId }) => {
-  console.log(userId, refresh_token);
+const findUserWithRefreshToken = async ({ refresh_token, userId }) => {
   return await MyModel.findOne({ userid: userId, refresh_token });
 };
 
 module.exports = {
   createToken,
-  findOne,
+  findUserWithRefreshToken,
 };
