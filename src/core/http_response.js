@@ -43,21 +43,21 @@ class ErrorResponse extends BaseResponse {}
 
 // Success Responses
 class OK extends SuccessResponse {
-  constructor(
+  constructor({
     message = status_message.OK,
     statusCode = status_code.OK,
-    metadata = {}
-  ) {
+    metadata = {},
+  }) {
     super({ message, statusCode, metadata });
   }
 }
 
 class CREATED extends SuccessResponse {
-  constructor(
+  constructor({
     message = status_message.CREATED,
     statusCode = status_code.CREATED,
-    metadata = {}
-  ) {
+    metadata = {},
+  }) {
     super({ message, statusCode, metadata });
   }
 }

@@ -8,6 +8,7 @@ const {
   login,
   info,
   changePassword,
+  updateAccessToken,
 } = require("../controllers/auth.controller");
 
 const { asyncHandle } = require("../utils/asyncHandle");
@@ -16,8 +17,10 @@ const { authorization } = require("../middlewares/auth.middleware");
 router.post("/register", asyncHandle(register));
 router.post("/login", asyncHandle(login));
 
-router.use(authorization);
+router.post("/token", asyncHandle(updateAccessToken));
 
+router.use(authorization);
+// /token => res =>
 router.get("/info", asyncHandle(info));
 router.put("/changePassword", asyncHandle(changePassword));
 

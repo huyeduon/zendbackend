@@ -4,6 +4,8 @@ const {
   findUserById,
   findUserByIdAndUpdatePassword,
 } = require("../services/user.service");
+
+const { createToken, findOne } = require("../services/keyToken.service");
 const { OK, BAD_REQUEST } = require("../core/http_response");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -43,10 +45,51 @@ const login = async (req, res, next) => {
 
   const token = jwt.sign({ userid: user.id }, process.env.jwt_private_key, {
     algorithm: "HS256",
+    expiresIn: "10s",
   });
+
+  const refresh_token = jwt.sign(
+    { userid: user.id },
+    process.env.jwt_private_key,
+    {
+      algorithm: "HS256",
+      expiresIn: "365day",
+    }
+  );
+
+  await createToken({ refresh_token: refresh_token, userid: user.id });
 
   new OK({
     message: "Login successfully",
+    metadata: { token: token, refresh_token: refresh_token },
+  }).send(res);
+};
+
+// Update the expired access token using refresh token
+const updateAccessToken = async (req, res, next) => {
+  // userId in header
+  // refresh token in body
+  // check if refresh_token belongs to userId
+  const userId = req.headers.userid;
+  const refresh_token = req.body.refresh_token;
+  const foundKey = await findOne({
+    refresh_token: refresh_token,
+    userId: userId,
+  });
+
+  if (!foundKey) throw new BAD_REQUEST("User and refresh token do not match");
+  // Verify refresh_token
+  const jwt_key = process.env.jwt_private_key;
+  const decoded = jwt.verify(refresh_token, jwt_key);
+  if (!decoded) throw new BAD_REQUEST("Refresg token is not valid");
+
+  const token = jwt.sign({ userid: userId }, process.env.jwt_private_key, {
+    algorithm: "HS256",
+    expiresIn: "10s",
+  });
+
+  new OK({
+    message: "Access token update successfully",
     metadata: { token: token },
   }).send(res);
 };
@@ -97,4 +140,5 @@ module.exports = {
   login,
   info,
   changePassword,
+  updateAccessToken,
 };

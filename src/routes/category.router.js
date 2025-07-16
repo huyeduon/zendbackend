@@ -16,7 +16,7 @@ const { asyncHandle } = require("../utils/asyncHandle");
 router.get("/", asyncHandle(getAllCategory));
 router.get("/:id", asyncHandle(getCategoryById));
 
-// router.use(authorization);
+router.use(authorization);
 
 // protected routes
 router.post("/", asyncHandle(postCategory));
