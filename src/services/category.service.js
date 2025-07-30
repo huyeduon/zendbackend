@@ -1,10 +1,16 @@
 const { default: slugify } = require("slugify");
 const MyModel = require("../models/category.model");
-
+const { cacheHelper } = require("../db/redis");
 // Get all categories
 // Find all categories with filtering
 const findAll = async ({ page = 1, limit = 10, keyword = "", select = "" }) => {
   // limit= item per page
+
+  // check if data is in redis cache
+  let redisKey = `category:${JSON.stringify({ page, limit, select })}`;
+  const cachedItem = await cacheHelper.getItem(redisKey);
+  if (cachedItem) return cachedItem;
+
   let skip = (page - 1) * limit;
   const selectedFields = select.split(",");
   const [data, total] = await Promise.all([
@@ -14,6 +20,12 @@ const findAll = async ({ page = 1, limit = 10, keyword = "", select = "" }) => {
       .select([...selectedFields]),
     MyModel.countDocuments(),
   ]);
+
+  // If not found in redis cache, save result in redis
+  console.log("Get result from server");
+  cacheHelper.setItem(redisKey, { page, total, limit, keyword, data });
+
+  // return result
   return { page, total, limit, keyword, data };
 };
 

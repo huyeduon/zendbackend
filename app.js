@@ -3,6 +3,7 @@ const express = require("express");
 const { default: mongoose } = require("mongoose");
 require("dotenv").config({ path: ".env" }); // Load environment variables here
 require("./src/db/mongodb");
+const { client } = require("./src/db/redis");
 const app = express();
 const port = 3000;
 app.use(express.json());
