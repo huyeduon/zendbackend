@@ -24,6 +24,10 @@ const postSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
     },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     post_slug: String,
     status: String,
     ordering: Number,

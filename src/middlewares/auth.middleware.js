@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { UNAUTHORIZED } = require("../core/http_response");
-
+const { findById } = require("../services/post.service");
+const { findUserById } = require("../services/user.service");
 // Log the key when the module is first loaded
 console.log("Authorization Middleware Loaded.");
 console.log(
@@ -60,4 +61,23 @@ const authorization = (req, res, next) => {
   }
 };
 
-module.exports = { authorization };
+const checkDeleteByAuthor = async (req, res, next) => {
+  const userId = req.userid;
+
+  const { isAdmin } = await findUserById(userId);
+
+  // admin can delete everything
+  if (isAdmin) return next();
+
+  const postId = req.params.id;
+
+  const { author: authorId } = await findById(postId);
+
+  if (userId === authorId.toString()) return next();
+
+  return res
+    .status(401)
+    .json(new UNAUTHORIZED("You are not allowed to delete.").send(res));
+};
+
+module.exports = { authorization, checkDeleteByAuthor };

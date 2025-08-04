@@ -9,7 +9,11 @@ const findAll = async ({ page = 1, limit = 10, keyword = "", select = "" }) => {
   // check if data is in redis cache
   let redisKey = `category:${JSON.stringify({ page, limit, select })}`;
   const cachedItem = await cacheHelper.getItem(redisKey);
-  if (cachedItem) return cachedItem;
+
+  if (cachedItem) {
+    console.log("Get from redis cache");
+    return cachedItem;
+  }
 
   let skip = (page - 1) * limit;
   const selectedFields = select.split(",");
@@ -43,6 +47,9 @@ const findById = async (id) => {
 // Delete a category by ID
 const findByIdAndDelete = async (id) => {
   await MyModel.findByIdAndDelete(id);
+
+  // Update redis cache
+  await cacheHelper.deleteKeysByPattern("category:*");
   return { message: "Delete Successfully" };
 };
 
@@ -56,7 +63,8 @@ const findByIdAndUpdate = async (id, update) => {
   } else {
     await MyModel.findByIdAndUpdate(id, update);
   }
-
+  // Update redis cache
+  await cacheHelper.deleteKeysByPattern("category:*");
   return { message: "Update Successfully" };
 };
 

@@ -15,6 +15,10 @@ const userSchema = new Schema(
       type: String,
       required: [true, "User must have password"],
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     collection: COLLECTION_NAME,

@@ -1,22 +1,21 @@
-const { BAD_REQUEST } = require("./core/http_response");
-const saltRouds = 10;
-
-const register = async (req, res, next) => {
-  const { email, password } = req.body;
-
-  // check if the email is already exist
-  const user = await findUserByEmail(email);
-  if (user) throw new BAD_REQUEST("Email exists, please use different email.");
-
-  let salt = bcrypt.genSaltSync(saltRouds);
-  let hashedPassword = bcrypt.hashSync(password, salt);
+const fetchData = async () => {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+    const data = await response.json();
+    return data;
+    // data here is actually a Promise
+  } catch (error) {
+    console.log("Error", error);
+  }
 };
 
-const findUserByEmail = async (email) => {
-  return await MyModel.findOne({ email });
+const processUserData = async () => {
+  try {
+    const users = await fetchData();
+    console.log("Fetched Users:", users);
+  } catch (error) {
+    console.error("Failed to process user data", error);
+  }
 };
 
-const registerUser = async (data) => {
-  await MyModel.creat(data);
-  return { message: "Created successfully" };
-};
+processUserData();
